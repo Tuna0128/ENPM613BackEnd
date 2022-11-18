@@ -1,10 +1,10 @@
-package com.example.demo;
+package com.bookaholic.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackEndApplicationTests {
+class BookaholicApplicationTests {
 
 	@Test
 	void contextLoads() {
