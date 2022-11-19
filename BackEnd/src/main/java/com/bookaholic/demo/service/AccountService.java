@@ -14,4 +14,5 @@ public interface AccountService {
     Boolean saveStudent(UserEntity userEntity, StudentEntity studentEntity);
     Boolean saveTeacher(UserEntity userEntity, TeacherEntity teacherEntity);
     Boolean saveUser(UserEntity userEntity);
+    Boolean loginAuthenticationByInput(String username, String password);
 }

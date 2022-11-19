@@ -7,8 +7,11 @@ import com.bookaholic.demo.repository.StudentRepository;
 import com.bookaholic.demo.repository.TeacherRepository;
 import com.bookaholic.demo.repository.UserRepository;
 import com.bookaholic.demo.service.AccountService;
+import com.bookaholic.demo.util.EncryptPassword;
+
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 @Service
@@ -70,7 +73,37 @@ public class AccountServiceImpl implements AccountService {
         if(userEntity == null){
             return false;
         }
-        userRepository.save(userEntity);
-        return true;
+        try {
+			String salt = EncryptPassword.generateSalt();
+			String password = userEntity.getPassword();
+			String hashedPassword = EncryptPassword.hashPassword(password, salt);
+			
+			userEntity.setSalt(salt);
+			userEntity.setPassword(hashedPassword);
+			userRepository.save(userEntity);
+			
+	        return true;
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+
+        return false;
     }
+
+	@Override
+	public Boolean loginAuthenticationByInput(String username, String password) {
+		UserEntity userEntity = queryUserByUsername(username);
+		if(userEntity == null) {
+			return false;
+		}
+
+		String salt = userEntity.getSalt();
+		String hashedPassword = userEntity.getPassword();
+		String hashedInputPassword = EncryptPassword.hashPassword(password, salt);
+		
+		if(hashedPassword.equals(hashedInputPassword))
+			return true;
+		else
+			return false;
+	}
 }
