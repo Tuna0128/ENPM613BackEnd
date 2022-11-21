@@ -106,4 +106,14 @@ public class AccountServiceImpl implements AccountService {
 		else
 			return false;
 	}
+	
+	@Override
+	public UUID getUserIdByUsername(String username) {
+		UserEntity userEntity = queryUserByUsername(username);
+		if(userEntity == null) {
+			return null;
+		}
+		UUID userId = userEntity.getUserId();
+		return userId;
+	}
 }

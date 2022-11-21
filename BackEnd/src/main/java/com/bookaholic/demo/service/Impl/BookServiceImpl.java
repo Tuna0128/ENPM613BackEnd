@@ -86,7 +86,6 @@ public class BookServiceImpl implements BookService {
         if(discussionEntity == null){
             return false;
         }
-        discussionEntity.setCreatingTime(new Date());
         discussionRepository.save(discussionEntity);
         return true;
     }
