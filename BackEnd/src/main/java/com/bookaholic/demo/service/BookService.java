@@ -10,7 +10,9 @@ import java.util.UUID;
 public interface BookService {
     List<BookEntity> queryAllBooks();
     BookEntity queryBookById(UUID bookId);
+    List<BookEntity> queryBookByTeacherId(UUID teacherId);
     Boolean saveBook(BookEntity bookEntity);
+    void deleteBook(BookEntity bookEntity);
     Boolean isEnrolled(UUID studentId, UUID bookId);
     Boolean saveEnrollment(EnrollEntity enrollEntity);
     List<DiscussionEntity> queryDiscussionByBookId(UUID bookId);

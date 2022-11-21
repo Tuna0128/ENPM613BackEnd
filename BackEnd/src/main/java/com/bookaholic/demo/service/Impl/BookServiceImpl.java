@@ -37,6 +37,11 @@ public class BookServiceImpl implements BookService {
     public BookEntity queryBookById(UUID bookId) {
         return bookRepository.findByBookId(bookId);
     }
+    
+    @Override
+    public List<BookEntity> queryBookByTeacherId(UUID teacherId){
+    	return bookRepository.findByTeacherId(teacherId);
+    }
 
     @Override
     public Boolean saveBook(BookEntity bookEntity) {
@@ -49,6 +54,10 @@ public class BookServiceImpl implements BookService {
         }
         bookRepository.save(bookEntity);
         return true;
+    }
+    @Override
+    public void deleteBook(BookEntity bookEntity) {
+    	bookRepository.delete(bookEntity);
     }
 
     @Override
