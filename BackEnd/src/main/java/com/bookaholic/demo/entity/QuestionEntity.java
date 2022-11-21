@@ -14,10 +14,10 @@ public class QuestionEntity {
     @Column(name = "quiz_id")
     private UUID quizId;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "answer")
+    @Column(name = "answer", columnDefinition = "TEXT")
     private String answer;
 
     public QuestionEntity() {

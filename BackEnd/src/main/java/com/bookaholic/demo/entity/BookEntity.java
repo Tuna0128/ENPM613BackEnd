@@ -16,37 +16,37 @@ public class BookEntity {
     @Column(name="teacher_Id")
     private UUID teacherId;
 
-    @Column(name="title")
+    @Column(name="title", columnDefinition="TEXT")
     private String title;
 
-    @Column(name = "sub_title")
+    @Column(name = "sub_title", columnDefinition="TEXT")
     private String subTitle;
 
-    @Column(name = "author")
+    @Column(name = "author", columnDefinition="TEXT")
     private String author;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition="TEXT")
     private String description;
 
-    @Column(name = "categories")
+    @Column(name = "categories", columnDefinition="TEXT")
     private String categories;
 
     @Column(name = "year")
     private Integer year;
 
-    @Column(name = "publisher")
+    @Column(name = "publisher", columnDefinition = "TEXT")
     private  String publisher;
 
     @Column(name = "pages")
     private Integer pages;
 
-    @Column(name = "isbn")
+    @Column(name = "isbn", columnDefinition = "TEXT")
     private String isbn;
 
-    @Column(name = "file_link")
+    @Column(name = "file_link", columnDefinition = "TEXT")
     private String fileLink;
 
-    @Column(name = "cover_link")
+    @Column(name = "cover_link", columnDefinition = "TEXT")
     private String coverLink;
 
     public BookEntity() {
