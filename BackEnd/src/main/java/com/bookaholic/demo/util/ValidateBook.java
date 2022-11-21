@@ -14,9 +14,6 @@ public class ValidateBook {
 	
 	public static String validate(BookPayload payload) {
 		
-		if(payload.getBookId()==null) 
-			return "Book ID missing";
-		
 		if(payload.getTeacherId()==null) 
 			return "Teacher ID missing";
 		
@@ -44,7 +41,8 @@ public class ValidateBook {
 	    if(publisher!=null && publisher.length()>publisherMaxLength) 
 	    	return "Publisher is too long";
 	    
-	    if(!validateISBN(payload.getIsbn()))
+	    String isbn = payload.getIsbn();
+	    if(isbn!=null && !validateISBN(isbn))
 	    	return "ISBN is invalid";
 	    
 	    String fileLink = payload.getFileLink();

@@ -37,9 +37,13 @@ public class TeacherOperations {
     	}	
     	
         if(bookService.saveBook(new BookEntity(book))){
-            return new ResponseEntity<>(HttpStatus.OK);
+        	Map<String, String> body = new HashMap<String, String>();
+        	body.put("message", "Added successfully");
+            return new ResponseEntity<>(body, HttpStatus.OK);
         } else{
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        	Map<String, String> body = new HashMap<String, String>();
+        	body.put("message", "Added unsuccessfully");
+            return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
     

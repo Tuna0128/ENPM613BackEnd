@@ -45,12 +45,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Boolean saveBook(BookEntity bookEntity) {
-        if(bookEntity == null || bookEntity.getIsbn() == null){
+        if(bookEntity == null){
             return false;
-        }
-        BookEntity existedBook = bookRepository.findByIsbn(bookEntity.getIsbn());
-        if(existedBook != null){
-            bookEntity.setBookId(existedBook.getBookId());
         }
         bookRepository.save(bookEntity);
         return true;
