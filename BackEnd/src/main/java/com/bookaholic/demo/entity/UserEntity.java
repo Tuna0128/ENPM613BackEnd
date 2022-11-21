@@ -14,13 +14,13 @@ public class UserEntity {
 	@Column(name="user_id", columnDefinition="uuid")
 	private UUID userId;
 
-	@Column(name="user_name")
+	@Column(name="user_name", columnDefinition = "TEXT")
     private String username;
 
-	@Column(name="password")
+	@Column(name="password", columnDefinition = "TEXT")
     private String password;
 
-	@Column(name="salt")
+	@Column(name="salt", columnDefinition = "TEXT")
 	private String salt;
 
 	@Column(name="sign_up_date")

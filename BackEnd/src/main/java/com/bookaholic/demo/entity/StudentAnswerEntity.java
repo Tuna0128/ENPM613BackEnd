@@ -17,7 +17,7 @@ public class StudentAnswerEntity {
     @Column(name = "question_id")
     private UUID questionId;
 
-    @Column(name = "answer")
+    @Column(name = "answer", columnDefinition = "TEXT")
     private String answer;
 
     public StudentAnswerEntity() {
