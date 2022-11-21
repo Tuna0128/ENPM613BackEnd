@@ -42,10 +42,10 @@ public class UserEntity {
 	}
 
 	public UserEntity(UserPayload userPayload){
-		username = userPayload.getUsername();
-		password = userPayload.getPassword();
-		signUpDate = new Date();
-		role = userPayload.getRole();
+		this.username = userPayload.getUsername();
+		this.password = userPayload.getPassword();
+		this.signUpDate = new Date();
+		this.role = userPayload.getRole();
 	}
 
 	public UUID getUserId() {
