@@ -7,6 +7,7 @@ import com.bookaholic.demo.model.DiscussionPayload;
 import com.bookaholic.demo.model.UserPayload;
 import com.bookaholic.demo.service.AccountService;
 import com.bookaholic.demo.service.BookService;
+import com.bookaholic.demo.util.JwtUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,8 +40,14 @@ public class CommonOperations {
         Boolean res = accountService.loginAuthenticationByInput(username, password);
         if(res) {
         	UUID userId = accountService.getUserIdByUsername(username);
+        	Integer role = accountService.getUserRoleByUsername(username);
+        	// Create token
+        	String token = JwtUtils.createToken(userId, username);
         	Map<String, Object> map = new HashMap<String, Object>();
         	map.put("userId", userId);
+        	map.put("username", username);
+        	map.put("role", role);
+        	map.put("token", token);
         	return ResponseEntity.ok(map);
         } else {
         	return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -49,6 +56,13 @@ public class CommonOperations {
     
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserPayload userPayload){
+    	// User payload validation
+    	if(userPayload.getUsername() == null || userPayload.getUsername().length() == 0 || 
+    			userPayload.getPassword() == null || userPayload.getPassword().length() ==0 || 
+    			(userPayload.getRole() != 0 && userPayload.getRole() != 1))
+    		return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    	
+    	// Save user if user name is not duplicate
         if(accountService.queryUserByUsername(userPayload.getUsername()) == null){
             Boolean res = accountService.saveUser(new UserEntity(userPayload));
             if(res)          	
@@ -70,8 +84,8 @@ public class CommonOperations {
     }
     
     @GetMapping("/discussion/list")
-    public ResponseEntity<List<DiscussionEntity>> listDiscussion(@RequestParam("bookId") UUID bookId){
-    	List<DiscussionEntity> discussionList = bookService.queryDiscussionByBookId(bookId);
+    public ResponseEntity<List<Map<String, Object>>> listDiscussion(@RequestParam("bookId") UUID bookId){
+    	List<Map<String, Object>> discussionList = bookService.queryDiscussionByBookId(bookId);
     	return ResponseEntity.ok(discussionList);
     }
 
