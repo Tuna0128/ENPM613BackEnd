@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -73,8 +74,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<DiscussionEntity> queryDiscussionByBookId(UUID bookId) {
-        return discussionRepository.findByBookId(bookId);
+    public List<Map<String, Object>> queryDiscussionByBookId(UUID bookId) {
+        return discussionRepository.ListDiscussionsOfOneBook(bookId);
     }
 
     @Override
