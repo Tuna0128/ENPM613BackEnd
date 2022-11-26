@@ -1,14 +1,14 @@
 package com.bookaholic.demo.repository;
 
-import com.bookaholic.demo.entity.EnrollEntity;
+import com.bookaholic.demo.entity.EnrollmentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
 @Repository
-public interface EnrollRepository extends JpaRepository<EnrollEntity, UUID> {
-    EnrollEntity findByEnrollId(UUID enrollId);
-    EnrollEntity findByStudentIdAndBookId(UUID studentId, UUID bookId);
-    EnrollEntity save(EnrollEntity enrollEntity);
+public interface EnrollRepository extends JpaRepository<EnrollmentEntity, UUID> {
+    EnrollmentEntity findByEnrollId(UUID enrollId);
+    EnrollmentEntity findByStudentIdAndBookId(UUID studentId, UUID bookId);
+    EnrollmentEntity save(EnrollmentEntity enrollEntity);
 }

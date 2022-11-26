@@ -2,7 +2,7 @@ package com.bookaholic.demo.service.Impl;
 
 import com.bookaholic.demo.entity.BookEntity;
 import com.bookaholic.demo.entity.DiscussionEntity;
-import com.bookaholic.demo.entity.EnrollEntity;
+import com.bookaholic.demo.entity.EnrollmentEntity;
 import com.bookaholic.demo.repository.BookRepository;
 import com.bookaholic.demo.repository.DiscussionRepository;
 import com.bookaholic.demo.repository.EnrollRepository;
@@ -53,12 +53,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Boolean isEnrolled(UUID studentId, UUID bookId) {
-        EnrollEntity enrollEntity = enrollRepository.findByStudentIdAndBookId(studentId, bookId);
+        EnrollmentEntity enrollEntity = enrollRepository.findByStudentIdAndBookId(studentId, bookId);
         return enrollEntity == null;
     }
 
     @Override
-    public Boolean saveEnrollment(EnrollEntity enrollEntity) {
+    public Boolean saveEnrollment(EnrollmentEntity enrollEntity) {
         if(enrollEntity == null){
             return false;
         }
