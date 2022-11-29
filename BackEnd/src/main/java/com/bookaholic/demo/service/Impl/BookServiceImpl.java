@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -37,18 +38,23 @@ public class BookServiceImpl implements BookService {
     public BookEntity queryBookById(UUID bookId) {
         return bookRepository.findByBookId(bookId);
     }
+    
+    @Override
+    public List<BookEntity> queryBookByTeacherId(UUID teacherId){
+    	return bookRepository.findByTeacherId(teacherId);
+    }
 
     @Override
     public Boolean saveBook(BookEntity bookEntity) {
-        if(bookEntity == null || bookEntity.getIsbn() == null){
+        if(bookEntity == null){
             return false;
-        }
-        BookEntity existedBook = bookRepository.findByIsbn(bookEntity.getIsbn());
-        if(existedBook != null){
-            bookEntity.setBookId(existedBook.getBookId());
         }
         bookRepository.save(bookEntity);
         return true;
+    }
+    @Override
+    public void deleteBook(BookEntity bookEntity) {
+    	bookRepository.delete(bookEntity);
     }
 
     @Override
@@ -68,8 +74,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<DiscussionEntity> queryDiscussionByBookId(UUID bookId) {
-        return discussionRepository.findByBookId(bookId);
+    public List<Map<String, Object>> queryDiscussionByBookId(UUID bookId) {
+        return discussionRepository.ListDiscussionsOfOneBook(bookId);
     }
 
     @Override

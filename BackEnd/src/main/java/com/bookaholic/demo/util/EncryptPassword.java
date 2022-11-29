@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 
-
 public class EncryptPassword {
 	
 	public static String hashPassword(String password, String salt) {

@@ -16,4 +16,5 @@ public interface AccountService {
     Boolean saveUser(UserEntity userEntity);
     Boolean loginAuthenticationByInput(String username, String password);
     UUID getUserIdByUsername(String username);
+    Integer getUserRoleByUsername(String username);
 }

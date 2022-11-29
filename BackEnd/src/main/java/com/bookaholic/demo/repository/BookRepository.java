@@ -13,4 +13,5 @@ public interface BookRepository extends JpaRepository<BookEntity, UUID> {
     BookEntity findByBookId(UUID bookId);
     BookEntity save(BookEntity bookEntity);
     BookEntity findByIsbn(String isbn);
+    List<BookEntity> findByTeacherId(UUID teacherId);
 }
