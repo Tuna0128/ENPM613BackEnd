@@ -1,6 +1,9 @@
 package com.bookaholic.demo.entity;
 
 import javax.persistence.*;
+
+import com.bookaholic.demo.model.DiscussionPayload;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -15,7 +18,7 @@ public class DiscussionEntity {
     @Column(name = "book_id")
     private UUID bookId;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition="TEXT")
     private String content;
 
     @Column(name = "creating_time")
@@ -33,6 +36,13 @@ public class DiscussionEntity {
         this.content = content;
         this.creatingTime = creatingTime;
         this.creator = creator;
+    }
+    
+    public DiscussionEntity(DiscussionPayload discussionPayload) {
+    	this.bookId = discussionPayload.getBookId();
+    	this.content = discussionPayload.getContent();
+    	this.creatingTime = new Date();
+    	this.creator = discussionPayload.getCreator();
     }
 
     public UUID getDiscussionId() {

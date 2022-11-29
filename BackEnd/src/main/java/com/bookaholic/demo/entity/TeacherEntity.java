@@ -14,10 +14,10 @@ public class TeacherEntity {
     @Column(name="teacher_id")
     private UUID teacherId;
 
-    @Column(name="name")
+    @Column(name="name", columnDefinition = "TEXT")
     private String name;
 
-    @Column(name="subject")
+    @Column(name="subject", columnDefinition = "TEXT")
     private String subject;
 
     @Column(name="teaching_time")

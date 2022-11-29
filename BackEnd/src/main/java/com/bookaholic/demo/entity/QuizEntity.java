@@ -15,7 +15,7 @@ public class QuizEntity {
     @Column(name = "book_id")
     private UUID bookId;
 
-    @Column(name = "quiz_name")
+    @Column(name = "quiz_name", columnDefinition = "TEXT")
     private String quizName;
 
     @Column(name = "due_date")
