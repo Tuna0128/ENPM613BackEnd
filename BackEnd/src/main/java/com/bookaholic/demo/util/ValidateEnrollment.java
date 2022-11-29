@@ -6,12 +6,19 @@ public class ValidateEnrollment {
 	
 	public static String validate(EnrollmentPayload enrollment) {
 		//TODO
-		if(true) {
-			return "Success";
-		}else if(true) {
-			return "Whatever reason";
+		if(enrollment.getEnrollId() == null) {
+			return "No Enrollment ID";
 		}
-		return null;
+		if(enrollment.getStudentId() == null) {
+			return "No Student ID";
+		}
+		if(enrollment.getBookId() == null) {
+			return "No Book ID";
+		}
+		if(enrollment.getStudentId() == null) {
+			return "No Student ID";
+		}
+		return "Success";
 		
 	}
 }

@@ -10,9 +10,12 @@ import com.bookaholic.demo.repository.UserRepository;
 import com.bookaholic.demo.service.BookService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import javax.persistence.TransactionRequiredException;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -66,6 +69,34 @@ public class BookServiceImpl implements BookService {
         enrollRepository.save(enrollEntity);
         return true;
     }
+    
+	@Override
+	public List<BookEntity> queryAllEnrollments(UUID studentId) {
+		List<EnrollmentEntity> allEnrollments = enrollRepository.findAllByStudentId(studentId);
+		List<BookEntity> enrolledBooks = new ArrayList<BookEntity>(); 	
+		for (EnrollmentEntity e : allEnrollments) {
+			enrolledBooks.add(bookRepository.findByBookId(e.getBookId()));
+		}
+		return enrolledBooks;
+	}
+	
+	@Override
+	public boolean deleteEnrollments(UUID studentId, UUID bookId) {
+		if(enrollRepository.findByStudentIdAndBookId(studentId, bookId)!=null) {
+			//TODO find a way to dissolve no return value problem
+			enrollRepository.delete(enrollRepository.findByStudentIdAndBookId(studentId, bookId)); 
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean deleteEnrollments(EnrollmentEntity enrollEntity) {
+		if(enrollRepository.findByStudentIdAndBookId(enrollEntity.getStudentId(), enrollEntity.getBookId())!=null) {
+			enrollRepository.delete(enrollEntity);
+			return true;
+		}
+		return false;
+	}
 
     @Override
     public List<DiscussionEntity> queryDiscussionByBookId(UUID bookId) {

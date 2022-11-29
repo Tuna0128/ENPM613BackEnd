@@ -23,6 +23,9 @@ public class EnrollmentEntity {
 
     @Column(name = "enroll_date")
     private Date enrollDate;
+    
+    public EnrollmentEntity() {
+    }
 
     public EnrollmentEntity(EnrollmentPayload enrollment) {
     	this.enrollId = enrollment.getEnrollId();

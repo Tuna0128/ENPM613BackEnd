@@ -9,6 +9,9 @@ public class EnrollmentPayload {
     private UUID bookId;
     private Date enrollDate;
     
+    public EnrollmentPayload() {
+    }
+    
     public EnrollmentPayload(UUID enrollId, UUID studentId, UUID bookId, Date enrollDate) {
     	this.setEnrollId(enrollId);
         this.setStudentId(studentId);
