@@ -1,12 +1,15 @@
 package com.bookaholic.demo.entity;
 
 import javax.persistence.*;
+
+import com.bookaholic.demo.model.EnrollmentPayload;
+
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
 @Table(name = "enroll")
-public class EnrollEntity {
+public class EnrollmentEntity {
     @Id
     @GeneratedValue
     @Column(name="enroll_id",columnDefinition="uuid")
@@ -20,11 +23,18 @@ public class EnrollEntity {
 
     @Column(name = "enroll_date")
     private Date enrollDate;
-
-    public EnrollEntity() {
+    
+    public EnrollmentEntity() {
     }
 
-    public EnrollEntity(UUID enrollId, UUID studentId, UUID bookId, Date enrollDate) {
+    public EnrollmentEntity(EnrollmentPayload enrollment) {
+    	this.enrollId = enrollment.getEnrollId();
+        this.studentId = enrollment.getStudentId();
+        this.bookId = enrollment.getBookId();
+        this.enrollDate = enrollment.getEnrollDate();
+    }
+
+    public EnrollmentEntity(UUID enrollId, UUID studentId, UUID bookId, Date enrollDate) {
         this.enrollId = enrollId;
         this.studentId = studentId;
         this.bookId = bookId;

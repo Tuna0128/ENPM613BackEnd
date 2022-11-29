@@ -2,7 +2,7 @@ package com.bookaholic.demo.service;
 
 import com.bookaholic.demo.entity.BookEntity;
 import com.bookaholic.demo.entity.DiscussionEntity;
-import com.bookaholic.demo.entity.EnrollEntity;
+import com.bookaholic.demo.entity.EnrollmentEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -18,4 +18,6 @@ public interface BookService {
     Boolean saveEnrollment(EnrollEntity enrollEntity);
     List<Map<String, Object>> queryDiscussionByBookId(UUID bookId);
     Boolean saveDiscussion(DiscussionEntity discussionEntity);
+	List<BookEntity> queryAllEnrollments(UUID studentId);
+	boolean deleteEnrollments(UUID studentId, UUID bookId);
 }
