@@ -87,7 +87,8 @@ public class JwtUtils {
 			Map<String, Object> userInfoMap = new HashMap<>();
 			userInfoMap.put("username", userEntity.getUsername());
 			userInfoMap.put("role", userEntity.getRole());
-			userInfoMap.put("token", token);	
+			userInfoMap.put("token", token);
+			userInfoMap.put("userId", userEntity.getUserId());
 			return userInfoMap;
 		}
 		else {
