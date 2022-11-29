@@ -16,6 +16,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 
 @Component
 public class JwtUtils {
@@ -61,6 +62,37 @@ public class JwtUtils {
 			return 1;
 		else
 			return 0;
+	}
+	
+	/**
+	 * login with token
+	 * @param token token in the request header
+	 * @return userInfo
+	 */
+	public Map<String, Object> tokenLogin(String token) {
+		Claims claims = null;
+		try {
+			claims = Jwts.parser().setSigningKey(KEY).parseClaimsJws(token).getBody();
+		} catch (ExpiredJwtException e) {
+			return null;
+		} catch (IllegalArgumentException e) {
+			return null;
+		} catch (SignatureException e) {
+			return null;
+		}
+		String id = claims.getId();
+		UUID userId = UUID.fromString(id);
+		UserEntity userEntity = accountService.queryUserByUserId(userId);
+		if(userEntity != null) {
+			Map<String, Object> userInfoMap = new HashMap<>();
+			userInfoMap.put("username", userEntity.getUsername());
+			userInfoMap.put("role", userEntity.getRole());
+			userInfoMap.put("token", token);	
+			return userInfoMap;
+		}
+		else {
+			return null;
+		}
 	}
 	
 }

@@ -54,6 +54,12 @@ public class CommonOperations {
         }
     }
     
+    @GetMapping("/tokenlogin")
+    public ResponseEntity<?> tokenLogin(){
+    	return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody UserPayload userPayload){
     	// User payload validation
