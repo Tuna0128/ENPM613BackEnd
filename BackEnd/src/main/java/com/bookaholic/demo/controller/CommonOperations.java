@@ -1,5 +1,6 @@
 package com.bookaholic.demo.controller;
 
+import com.bookaholic.demo.entity.BookEntity;
 import com.bookaholic.demo.entity.DiscussionEntity;
 import com.bookaholic.demo.entity.UserEntity;
 import com.bookaholic.demo.model.DiscussionPayload;
@@ -88,9 +89,31 @@ public class CommonOperations {
     	return ResponseEntity.ok(discussionList);
     }
 
-    @GetMapping("/bookDetail")
-    public ResponseEntity<?> getBookDetail(@RequestParam("bookId") UUID bookId){
-        return new ResponseEntity<>(bookService.queryBookById(bookId),HttpStatus.OK);
+    @GetMapping("/bookDetail/{bookId}/{userId}")
+    public ResponseEntity<?> getBookDetail(@PathVariable UUID bookId, @PathVariable UUID userId){
+        BookEntity book = bookService.queryBookById(bookId);
+        UUID teacherId = book.getTeacherId();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("author", book.getAuthor());
+        map.put("categories", book.getCategories());
+        map.put("coverLink", book.getCoverLink());
+        map.put("description", book.getDescription());
+        map.put("fileLink", book.getFileLink());
+        map.put("isbn", book.getIsbn());
+        map.put("pages", book.getPages());
+        map.put("publisher", book.getPublisher());
+        map.put("subTitle", book.getSubTitle());
+        map.put("teacherId", teacherId);
+        map.put("teacherName", accountService.queryUserByUserId(teacherId).getUsername());
+        if (userId.equals(teacherId)){
+            map.put("enrolled", 0);
+        }else if (bookService.isEnrolled(userId, bookId)){
+            map.put("enrolled", 1);
+        } else{
+            map.put("enrolled", 2);
+        }
+        map.put("enrolledAmount", bookService.enrolledAmount(bookId));
+        return ResponseEntity.ok(map);
     }
 
 }

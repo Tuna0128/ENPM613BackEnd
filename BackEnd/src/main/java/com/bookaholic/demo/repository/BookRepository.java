@@ -2,6 +2,7 @@ package com.bookaholic.demo.repository;
 
 import com.bookaholic.demo.entity.BookEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,4 +15,7 @@ public interface BookRepository extends JpaRepository<BookEntity, UUID> {
     BookEntity save(BookEntity bookEntity);
     BookEntity findByIsbn(String isbn);
     List<BookEntity> findByTeacherId(UUID teacherId);
+
+    @Query(value="SELECT * from book WHERE book_id = (SELECT book_id from enroll WHERE student_id = :studentId)", nativeQuery=true)
+    List<BookEntity> queryBooksByStudentId(UUID studentId);
 }
