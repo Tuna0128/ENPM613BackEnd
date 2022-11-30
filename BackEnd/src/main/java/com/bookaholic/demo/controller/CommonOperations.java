@@ -94,6 +94,8 @@ public class CommonOperations {
         BookEntity book = bookService.queryBookById(bookId);
         UUID teacherId = book.getTeacherId();
         Map<String, Object> map = new HashMap<String, Object>();
+        map.put("title", book.getTitle());
+        map.put("year", book.getYear());
         map.put("author", book.getAuthor());
         map.put("categories", book.getCategories());
         map.put("coverLink", book.getCoverLink());
