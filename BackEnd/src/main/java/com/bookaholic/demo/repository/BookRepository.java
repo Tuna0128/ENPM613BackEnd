@@ -16,6 +16,6 @@ public interface BookRepository extends JpaRepository<BookEntity, UUID> {
     BookEntity findByIsbn(String isbn);
     List<BookEntity> findByTeacherId(UUID teacherId);
 
-    @Query(value="SELECT * from book WHERE book_id = (SELECT book_id from enroll WHERE student_id = :studentId)", nativeQuery=true)
+    @Query(value="SELECT * from book WHERE book_id IN (SELECT book_id from enroll WHERE student_id = :studentId)", nativeQuery=true)
     List<BookEntity> queryBooksByStudentId(UUID studentId);
 }
