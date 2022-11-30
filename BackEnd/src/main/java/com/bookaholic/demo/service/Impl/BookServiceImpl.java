@@ -57,7 +57,12 @@ public class BookServiceImpl implements BookService {
     @Override
     public Boolean isEnrolled(UUID studentId, UUID bookId) {
         EnrollmentEntity enrollEntity = enrollRepository.findByStudentIdAndBookId(studentId, bookId);
-        return enrollEntity == null;
+        return enrollEntity != null;
+    }
+
+    @Override
+    public Long enrolledAmount(UUID bookId) {
+        return enrollRepository.countByBookId(bookId);
     }
 
     @Override
@@ -71,31 +76,13 @@ public class BookServiceImpl implements BookService {
     }
     
 	@Override
-	public List<BookEntity> queryAllEnrollments(UUID studentId) {
-		List<EnrollmentEntity> allEnrollments = enrollRepository.findAllByStudentId(studentId);
-		List<BookEntity> enrolledBooks = new ArrayList<BookEntity>(); 	
-		for (EnrollmentEntity e : allEnrollments) {
-			enrolledBooks.add(bookRepository.findByBookId(e.getBookId()));
-		}
-		return enrolledBooks;
+	public List<BookEntity> queryBooksByStudentId(UUID studentId) {
+		return bookRepository.queryBooksByStudentId(studentId);
 	}
-	
+
 	@Override
-	public boolean deleteEnrollments(UUID studentId, UUID bookId) {
-		if(enrollRepository.findByStudentIdAndBookId(studentId, bookId)!=null) {
-			//TODO find a way to dissolve no return value problem
-			enrollRepository.delete(enrollRepository.findByStudentIdAndBookId(studentId, bookId)); 
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean deleteEnrollments(EnrollmentEntity enrollEntity) {
-		if(enrollRepository.findByStudentIdAndBookId(enrollEntity.getStudentId(), enrollEntity.getBookId())!=null) {
-			enrollRepository.delete(enrollEntity);
-			return true;
-		}
-		return false;
+	public void deleteEnrollments(UUID studentId, UUID bookId) {
+        enrollRepository.deleteByStudentIdAndBookId(studentId, bookId);
 	}
 
     @Override

@@ -15,9 +15,10 @@ public interface BookService {
     Boolean saveBook(BookEntity bookEntity);
     void deleteBook(BookEntity bookEntity);
     Boolean isEnrolled(UUID studentId, UUID bookId);
+    Long enrolledAmount(UUID bookId);
     Boolean saveEnrollment(EnrollmentEntity enrollEntity);
     List<Map<String, Object>> queryDiscussionByBookId(UUID bookId);
     Boolean saveDiscussion(DiscussionEntity discussionEntity);
-	List<BookEntity> queryAllEnrollments(UUID studentId);
-	boolean deleteEnrollments(UUID studentId, UUID bookId);
+	List<BookEntity> queryBooksByStudentId(UUID studentId);
+    void deleteEnrollments(UUID studentId, UUID bookId);
 }

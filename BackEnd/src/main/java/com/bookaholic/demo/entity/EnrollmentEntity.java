@@ -1,9 +1,8 @@
 package com.bookaholic.demo.entity;
 
-import javax.persistence.*;
-
 import com.bookaholic.demo.model.EnrollmentPayload;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
@@ -28,10 +27,9 @@ public class EnrollmentEntity {
     }
 
     public EnrollmentEntity(EnrollmentPayload enrollment) {
-    	this.enrollId = enrollment.getEnrollId();
         this.studentId = enrollment.getStudentId();
         this.bookId = enrollment.getBookId();
-        this.enrollDate = enrollment.getEnrollDate();
+        this.enrollDate = new Date();
     }
 
     public EnrollmentEntity(UUID enrollId, UUID studentId, UUID bookId, Date enrollDate) {
