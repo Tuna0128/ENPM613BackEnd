@@ -1,5 +1,6 @@
 package com.bookaholic.demo.util;
 
+import java.util.ArrayList;
 import com.bookaholic.demo.model.BookPayload;
 
 public class ValidateBook {
@@ -50,26 +51,32 @@ public class ValidateBook {
 	}
 	
 	private static boolean validateISBN(String isbn) {
-		return true;
-//		if (isbn == null){
-//			return false;
-//		}
-//		ArrayList<Integer> numbers = new ArrayList<Integer>();
-//		for(int i = 0 ; i< isbn.length(); i++){
-//			if(isbn.charAt(i) <= '9' && isbn.charAt(i)>='0'){
-//				numbers.add(isbn.charAt(i) - '0');
-//			}
-//		}
-//		int sum = 0;
-//		if(numbers.size()==10) {
-//			for(int i=0;i<10;i++)
-//				sum += numbers.get(i)*(10-i);
-//			if(sum%11==0) return true;
-//		}else if(numbers.size()==13) {
-//			for(int i=0;i<13;i++)
-//				sum += numbers.get(i)*(13-i);
-//			if(sum%10==0) return true;
-//		}
-//		return false;
+		if (isbn == null){
+			return false;
+		}
+		ArrayList<Integer> numbers = new ArrayList<Integer>();
+		for(int i = 0 ; i< isbn.length(); i++){
+			if(isbn.charAt(i) <= '9' && isbn.charAt(i)>='0'){
+				numbers.add(isbn.charAt(i) - '0');
+			}
+		}
+		int sum = 0;
+		if(numbers.size()==10) {
+			for(int i=0;i<10;i++)
+				sum += numbers.get(i)*(10-i);
+			if(sum%11==0) return true;
+		}else if(numbers.size()==13) {
+			for(int i=0;i<12;i++) {
+				if(i%2==0)
+					sum += numbers.get(i);
+				else
+					sum += numbers.get(i)*3;
+			}
+			int lastDigit = 10 - sum%10;
+			if(lastDigit==10)
+				lastDigit = 0;
+			if(numbers.get(12)==lastDigit) return true;
+		}
+		return false;
 	}
 }
