@@ -1,21 +1,17 @@
 package com.bookaholic.demo.controller;
 
-import com.bookaholic.demo.entity.BookEntity;
 import com.bookaholic.demo.entity.EnrollmentEntity;
-import com.bookaholic.demo.model.BookPayload;
 import com.bookaholic.demo.model.EnrollmentPayload;
-import com.bookaholic.demo.service.AccountService;
 import com.bookaholic.demo.service.BookService;
 import com.bookaholic.demo.service.EnrollmentService;
 import com.bookaholic.demo.util.ValidateEnrollment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/student")
@@ -85,6 +81,11 @@ public class StudentOperations {
     @GetMapping("/books/viewenrolled")
     public ResponseEntity<?> viewEnrolledBook(@RequestParam UUID studentId){
         return new ResponseEntity<>(bookService.queryAllEnrollments(studentId),HttpStatus.OK);
+    }
+
+    @GetMapping("/books/isenrolled/{userId}/{bookId}")
+    public ResponseEntity<?> download(@PathVariable UUID studentId, @PathVariable UUID bookId){
+        return new ResponseEntity<>(bookService.isEnrolled(studentId, bookId),HttpStatus.OK);
     }
 
 }
