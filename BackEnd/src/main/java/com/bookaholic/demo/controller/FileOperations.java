@@ -1,31 +1,30 @@
 package com.bookaholic.demo.controller;
 
 import com.bookaholic.demo.entity.UserEntity;
-import com.bookaholic.demo.model.UserPayload;
 import com.bookaholic.demo.model.FilePayload;
 import com.bookaholic.demo.service.AccountService;
-
-import java.util.UUID;
-import java.util.Map;
-import java.util.HashMap;
-
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 
 @RestController
@@ -51,30 +50,65 @@ public class FileOperations {
 			body.put("message", "no user found with given uuid");
 			return new ResponseEntity<>(body, HttpStatus.NOT_ACCEPTABLE);
 		}
-		String rootPath = System.getProperty("user.dir");
-		String filePath = rootPath+"/userUpload/";
-		File directory = new File(filePath);
-		if(!directory.exists()) {
-			directory.mkdir();
-		}
-		filePath += user.getUserId()+"/";
-		directory = new File(filePath);
-		if(!directory.exists()) {
-			directory.mkdir();
-		}
-		try {
-			byte[] bytes = file.getBytes();
-			Path path = Paths.get(filePath + file.getOriginalFilename());
-			Files.write(path, bytes);
-		}catch(IOException e) {
-			e.printStackTrace();
+
+		String filename = StringUtils.cleanPath(file.getOriginalFilename());
+		if (filename.contains("..")) {
 			Map<String, String> body = new HashMap<String, String>();
-			body.put("message", "IOException occured");
+			body.put("message", "Invalid filename");
 			return new ResponseEntity<>(body, HttpStatus.NOT_ACCEPTABLE);
 		}
+
+//		get file directory
+		Path uploadLocation = Paths.get("").resolve("userUpload").resolve(user.getUserId().toString());
+
+		try (InputStream inputStream = file.getInputStream()) {
+			Files.createDirectories(uploadLocation);
+			Files.copy(inputStream, uploadLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+			Map<String, String> body = new HashMap<String, String>();
+			body.put("message", "Cannot Save file");
+			return new ResponseEntity<>(body, HttpStatus.NOT_ACCEPTABLE);
+		}
+
+		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+				.path("/file/download/"+user.getUserId().toString()+"/")
+				.path(filename)
+				.toUriString();
+
 		Map<String, String> body = new HashMap<String, String>();
 		body.put("message", "File uploaded successfully");
-		body.put("fileLink", filePath);
+		body.put("fileLink", fileDownloadUri);
 		return new ResponseEntity<>(body, HttpStatus.ACCEPTED);
+	}
+
+	@GetMapping("/download/{userId}/{filename:.+}")
+	public ResponseEntity<?> download(@PathVariable String userId, @PathVariable String filename){
+		Path filePath = Paths.get("").resolve("userUpload").resolve(userId).resolve(filename).normalize();
+		Resource file = null;
+		try {
+			file = new UrlResource(filePath.toUri());
+			if(!file.exists()){
+				throw new MalformedURLException("File not found " + filename);
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			Map<String, String> body = new HashMap<String, String>();
+			body.put("message", "Invalid file");
+			return new ResponseEntity<>(body, HttpStatus.NOT_ACCEPTABLE);
+		}
+
+		// Try to determine file's content type
+		String contentType= URLConnection.guessContentTypeFromName(filename);
+
+		// Fallback to the default content type if type could not be determined
+		if(contentType == null) {
+			contentType = "application/octet-stream";
+		}
+
+		return ResponseEntity.ok()
+				.contentType(MediaType.parseMediaType(contentType))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+				.body(file);
 	}
 }

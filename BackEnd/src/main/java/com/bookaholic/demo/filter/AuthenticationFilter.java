@@ -1,27 +1,20 @@
 package com.bookaholic.demo.filter;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
+import com.bookaholic.demo.util.JwtUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
-
-import com.bookaholic.demo.util.JwtUtils;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Order(1)
@@ -54,10 +47,11 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
     	Map<String, String> map = new HashMap<>();
     	String url = ((HttpServletRequest)servletRequest).getRequestURI();
+
     	if(url != null) {
     		System.out.println("url: " + url);
     		// pass if it is login or signup
-    		if("/common/login".equals(url) || "/common/signup".equals(url)) {
+    		if("/common/login".equals(url) || "/common/signup".equals(url) || url.startsWith("/file/download/")) {
     			filterChain.doFilter(servletRequest, servletResponse);
     			return;
     		} else if ("/common/tokenlogin".equals(url)) {
