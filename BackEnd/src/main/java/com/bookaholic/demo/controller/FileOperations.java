@@ -82,7 +82,6 @@ public class FileOperations {
 		return new ResponseEntity<>(body, HttpStatus.ACCEPTED);
 	}
 
-	@CrossOrigin(origins = "*")
 	@GetMapping("/download/{userId}/{filename:.+}")
 	public ResponseEntity<?> download(@PathVariable String userId, @PathVariable String filename){
 		Path filePath = Paths.get("").resolve("userUpload").resolve(userId).resolve(filename).normalize();
