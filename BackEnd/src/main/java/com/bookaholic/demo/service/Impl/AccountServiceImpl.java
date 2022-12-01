@@ -70,12 +70,14 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Boolean saveUser(UserEntity userEntity) {
-        if(userEntity == null){
+        if(userEntity == null || userEntity.getUsername() == null){
             return false;
         }
         try {
 			String salt = EncryptPassword.generateSalt();
 			String password = userEntity.getPassword();
+			if(password == null)
+				return false;
 			String hashedPassword = EncryptPassword.hashPassword(password, salt);
 			
 			userEntity.setSalt(salt);
