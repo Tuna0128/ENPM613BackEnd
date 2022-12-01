@@ -51,33 +51,11 @@ public class AuthenticationFilter implements Filter {
     	if(url != null) {
     		System.out.println("url: " + url);
     		// pass if it is login or signup
-    		if("/common/login".equals(url) || "/common/signup".equals(url) || url.startsWith("/file/download/")) {
+    		if("/common/login".equals(url) || "/common/signup".equals(url) ||
+    				"/common/tokenlogin".equals(url) || url.startsWith("/file/download/")) {
     			filterChain.doFilter(servletRequest, servletResponse);
     			return;
-    		} else if ("/common/tokenlogin".equals(url)) {
-				System.out.println("login with token");
-				String token = ((HttpServletRequest)servletRequest).getHeader("token");
-				Map<String, Object> userInfoMap = jwtUtils.tokenLogin(token);
-				if (userInfoMap == null) {
-					map.put("errorMsg", "token login failed");
-				} else {
-					//Convert map to json string
-		    		GsonBuilder builder = new GsonBuilder();
-		    		builder.setPrettyPrinting();
-		    		Gson gson = builder.create();
-		    		String jsonString = gson.toJson(userInfoMap);
-		    		servletResponse.setContentType("application/json");
-		    		servletResponse.setCharacterEncoding("utf-8");
-		    		((HttpServletResponse)servletResponse).setStatus(200);
-		    		
-		    		// Response
-		    		PrintWriter pw = servletResponse.getWriter();
-		    		pw.write(jsonString);
-		    		pw.flush();
-		    		pw.close();
-				}		
-			}
-    		else {
+    		} else {
     			System.out.println(url + " needs authentication");
     			String token = ((HttpServletRequest)servletRequest).getHeader("token");
     			if(token != null && token.length() != 0) {

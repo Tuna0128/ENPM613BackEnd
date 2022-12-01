@@ -8,20 +8,30 @@ import com.bookaholic.demo.model.UserPayload;
 import com.bookaholic.demo.service.AccountService;
 import com.bookaholic.demo.service.BookService;
 import com.bookaholic.demo.util.JwtUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/common")
 public class CommonOperations {
     private final AccountService accountService;
     private final BookService bookService;
+	@Autowired
+	private JwtUtils jwtUtils;
 
     public CommonOperations(AccountService accountService, BookService bookService) {
         this.accountService = accountService;
@@ -49,8 +59,17 @@ public class CommonOperations {
     }
     
     @GetMapping("/tokenlogin")
-    public ResponseEntity<?> tokenLogin(){
-    	return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> tokenLogin(@RequestHeader("token") String token){
+    	
+    	//System.out.println("login with token: " + token);
+		Map<String, Object> userInfoMap = jwtUtils.tokenLogin(token);
+		if (userInfoMap == null) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("errorMsg", "token login failed");
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(map);
+		} else {
+			return ResponseEntity.ok(userInfoMap);
+		}   	
     }
     
     
