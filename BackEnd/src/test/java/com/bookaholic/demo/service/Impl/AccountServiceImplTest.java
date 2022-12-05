@@ -1,25 +1,16 @@
 package com.bookaholic.demo.service.Impl;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.byteThat;
-import static org.mockito.ArgumentMatchers.intThat;
-
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.bookaholic.demo.BookaholicApplicationTests;
 import com.bookaholic.demo.entity.UserEntity;
 import com.bookaholic.demo.model.UserPayload;
 import com.bookaholic.demo.service.AccountService;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Test account service")
 class AccountServiceImplTest extends BookaholicApplicationTests{
@@ -78,7 +69,7 @@ class AccountServiceImplTest extends BookaholicApplicationTests{
 		UserEntity userEntity1 = new UserEntity(userPayload1);
 		UserEntity userEntity2 = new UserEntity(userPayload2);
 		UserEntity userEntity3 = null;
-		assertAll("Create users with incomplete inforamtion",
+		assertAll("Create users with incomplete information",
 				()->assertFalse(accountService.saveUser(userEntity1)),
 				()->assertFalse(accountService.saveUser(userEntity2)),
 				()->assertFalse(accountService.saveUser(userEntity3)));
@@ -126,10 +117,10 @@ class AccountServiceImplTest extends BookaholicApplicationTests{
 	}
 	
 	@Test
-	@RepeatedTest(3)
+//	@RepeatedTest(3)
 	@Transactional
 	@DisplayName("Test get user role by name")
-	void testGetUserRoleByUsername() {
+	void testGetUserRoleByUsername() throws InterruptedException {
 		UserPayload userPayload = new UserPayload();
 		userPayload.setUsername("random_user");
 		userPayload.setPassword("PASSWORD");

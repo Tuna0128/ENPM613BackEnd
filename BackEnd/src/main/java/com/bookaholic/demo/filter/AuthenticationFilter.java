@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -18,12 +16,12 @@ import java.util.Map;
 
 
 @Order(1)
-@WebFilter(filterName = "authenticationFilter", urlPatterns = "/*" , initParams = {
-        @WebInitParam(name = "URL", value = "http://localhost:8080")})
+//@WebFilter(filterName = "authenticationFilter", urlPatterns = "/*" , initParams = {
+//        @WebInitParam(name = "URL", value = "http://localhost:8080")})
 public class AuthenticationFilter implements Filter {
 	@Autowired
 	private JwtUtils jwtUtils;
-	
+
     private String url;
     /**
      * execute only once
@@ -71,7 +69,7 @@ public class AuthenticationFilter implements Filter {
     				map.put("errorMsg", "token required");
     			}
     		}
-    		
+
     		//Convert map to json string
     		GsonBuilder builder = new GsonBuilder();
     		builder.setPrettyPrinting();
@@ -80,7 +78,7 @@ public class AuthenticationFilter implements Filter {
     		servletResponse.setContentType("application/json");
     		servletResponse.setCharacterEncoding("utf-8");
     		((HttpServletResponse)servletResponse).setStatus(403);
-    		
+
     		// Response
     		PrintWriter pw = servletResponse.getWriter();
     		pw.write(jsonString);
@@ -90,7 +88,7 @@ public class AuthenticationFilter implements Filter {
     }
 
     /**
-     * call it when destroy 
+     * call it when destroy
      */
     @Override
     public void destroy() {
